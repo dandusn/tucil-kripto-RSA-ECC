@@ -56,7 +56,7 @@ def Decript(c, e):
         p = pow(c[i], e) % n
         plain.append(p)
 
-    print plain
+    print(plain)
     return plain
 
 def writeFileEnkript(fl,w):
@@ -86,8 +86,8 @@ if e < 1 or e > on: raise Exception("E must be > 1 and < 0n")
 if gcd(e, on)!=1: raise Exception("E is not coprime with 0n")
 n = p*q
 d = find_inverse(e,on)
-print "public key: (N: %i, E: %i)" % (n, e)
-print "private key: (N: %i, D: %i)" % (n, d)
+print("public key: (N: %i, E: %i)" % (n, e))
+print("private key: (N: %i, D: %i)" % (n, d))
 
 plain = readFileEnkript("plain.txt")
 cipher = Encript(plain,d)
@@ -95,7 +95,7 @@ writeFileEnkript("encript.txt",cipher)
 
 
 filedec = readFileDecript("encript.txt")
-print filedec
+print(filedec)
 resplain =  Decript(filedec, e)
 
 writeFileDekript("decript.txt", resplain)
