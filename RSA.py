@@ -1,3 +1,5 @@
+import os
+
 def isPrime(num):
     for i in range(3, num):
         if num % i == 0:
@@ -30,12 +32,16 @@ def Encript(p,d):
 def readFileEnkript(fl):
     with open(fl, 'rb') as f:
         words = toIntst(f.read())
+        print "file size"
+        print getSize(fl)
     return words
 
 def readFileDecript(fl):
     with open(fl, 'rb') as f:
         w = f.read().split( )
         w = toIntde(w)
+        print "file size"
+        print getSize(fl)
     return w
 
 def toIntst(w):
@@ -62,12 +68,20 @@ def writeFileEnkript(fl,w):
     for i in range(len(w)):
         if(i != len(w)-1): f.write(str(w[i])+" ")
         else: f.write(str(w[i]))
+    print "file size"
+    print getSize(fl)
     f.close()
+
+def getSize(filename):
+    st = os.stat(filename)
+    return st.st_size
 
 def writeFileDekript(fl,w):
     f = open(fl, "wb")
     for i in range(len(w)):
         f.write(chr(w[i]))
+    print "file size"
+    print getSize(fl)
     f.close()
 
 def writeFileKey(fl,w):
