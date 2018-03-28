@@ -55,8 +55,6 @@ def Decript(c, e):
     for i in range(len(c)):
         p = pow(c[i], e) % n
         plain.append(p)
-
-    print(plain)
     return plain
 
 def writeFileEnkript(fl,w):
@@ -72,6 +70,18 @@ def writeFileDekript(fl,w):
         f.write(chr(w[i]))
     f.close()
 
+def writeFileKey(fl,w):
+    f = open(fl, "wb")
+    f.write(w)
+    f.close()
+
+def readkey(fl):
+    f = open(fl, "rb")
+    x = f.read()
+    return x
+
+
+import time
 #main
 print("input P")
 p = input()
@@ -81,21 +91,60 @@ if not isPrime(p): raise Exception("P (%i) is not prime" % (p,))
 if not isPrime(q): raise Exception("Q (%i) is not prime" % (q,))
 print("input E")
 e = input()
+
 on = (p-1)*(q-1)
 if e < 1 or e > on: raise Exception("E must be > 1 and < 0n")
 if gcd(e, on)!=1: raise Exception("E is not coprime with 0n")
 n = p*q
 d = find_inverse(e,on)
-print("public key: (N: %i, E: %i)" % (n, e))
-print("private key: (N: %i, D: %i)" % (n, d))
 
+print "public key: (N: %i, E: %i)" % (n, e)
+print "private key: (N: %i, D: %i)" % (n, d)
+
+print ("private key in file privatekey")
+writeFileKey("privatekey", str(d))
+
+print("publickey in file publickey")
+writeFileKey("publickey", str(e))
+
+#encript
+print "\n\n\nEncript\n\n"
 plain = readFileEnkript("plain.txt")
-cipher = Encript(plain,d)
+print "input file or key"
+try:
+    userInput = int(input("Enter private key: "))
+except ValueError:
+    print("input is file")
+    start = time.time()
+    cipher = Encript(plain, readkey(userInput))
+    done = time.time()
+else:
+    print("input is key")
+    start = time.time()
+    cipher = Encript(plain, userInput)
+    done = time.time()
+
 writeFileEnkript("encript.txt",cipher)
+print "cipher in encript.txt"
+print "how long encript: %f" % (done-start)
 
-
+#decript
+print "\n\n\nDecript\n"
 filedec = readFileDecript("encript.txt")
-print(filedec)
-resplain =  Decript(filedec, e)
+print "input file or key"
+try:
+    userInput = int(input("Enter public key: "))
+except ValueError:
+    print("input is file")
+    start = time.time()
+    resplain = Decript(filedec, readkey(userInput))
+    done = time.time()
+else:
+    print("input is key")
+    start = time.time()
+    resplain = Decript(filedec, userInput)
+    done = time.time()
 
 writeFileDekript("decript.txt", resplain)
+print "plaintext in decript.txt"
+print "how long decript: %f" % (done-start)
